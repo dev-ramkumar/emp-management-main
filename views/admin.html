@@ -1,0 +1,88 @@
+<head>
+    
+    <title>ADMIN</title>
+    <style>
+      body {
+          display: block;
+          margin: auto;
+          width: 50%;
+          font-size: 20px;
+          margin-top: 50px;
+      }
+      input {
+          width: 30%;
+          padding: 5px;
+          font-size: 16px;
+          margin: 5px;
+
+      }
+      
+  </style>
+</head>
+<body>
+  <a href="/add.html"><button>Add new User</button></a><br>
+  Email <br><select onchange="changed()" id='mail'></select><br>
+  Name <br><input autocomplete="off" name='name' id='name'><br>
+  Location <br><input autocomplete="off" name='loc' id='loc'><br>
+  Password <br><input id='password' type='password'><br>
+<button onclick="update()">update</button>
+</body>
+
+<script>
+
+function update() {
+    var name = document.getElementById('name')
+    var loc = document.getElementById('loc')
+    var mail = document.getElementById('mail')
+    var password = document.getElementById('password')
+    var data = {
+      name: name.value,
+      password: password.value,
+      location: loc.value,
+      username: mail.value.split("@")[0]
+    }
+    const xhttp1 = new XMLHttpRequest();
+  xhttp1.onload = function() {
+    var res = JSON.parse(this.responseText)
+    alert(res.message)
+  }
+  xhttp1.open("POST", "api/admin/update");
+  xhttp1.setRequestHeader("Content-type", "application/json");
+  xhttp1.send(JSON.stringify(data));
+}
+
+function changed() {
+    var mail = document.getElementById('mail').value
+    const xhttp = new XMLHttpRequest();
+    xhttp.onload = function() {
+    var name = document.getElementById('name')
+    var loc = document.getElementById('loc')
+    var res = JSON.parse(this.responseText)
+    name.value = res[0]['NAME']
+    loc.value = res[0]['LOCATION']
+  }
+  xhttp.open("GET", "api/admin/"+mail.split('@')[0]);
+  xhttp.setRequestHeader("Content-type", "application/json");
+  xhttp.send();
+}
+
+
+
+  const xhttp = new XMLHttpRequest();
+  xhttp.onload = function() {
+    var name = document.getElementById('name')
+    var loc = document.getElementById('loc')
+    var password = document.getElementById('password')
+    var res = JSON.parse(this.responseText)
+    var select = ''
+    res.forEach(element => {
+        select = select + `<option value="${element['email']}">${element['email']}</option>`
+    });
+    document.getElementById('mail').innerHTML = select
+     name.value = res[0]['name']
+     loc.value = res[0]['location']
+  }
+  xhttp.open("GET", "api/admin");
+  xhttp.setRequestHeader("Content-type", "application/json");
+  xhttp.send();
+</script>

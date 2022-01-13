@@ -1,0 +1,54 @@
+<head>
+    <title>Login</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            display: block;
+            margin: auto;
+            width: 50%;
+            font-size: 20px;
+            margin-top: 50px;
+        }
+        input {
+            width: 30%;
+            padding: 5px;
+            font-size: 16px;
+            margin: 5px;
+
+        }
+        
+    </style>
+</head>
+<body>
+    <div>
+        <label>Name</label><input id='name'/><br/>
+        <label>Email</label><input id='email'/><br/>
+        <label>role</label><select id='role'>
+            <option value='user'>user</option>
+            <option value='admin'>admin</option>
+        </select><br/>
+        <button onclick="add()">add</button>
+    </div>
+</body>
+
+<script>
+
+function add() {
+    var user = document.getElementById('name').value;
+    var mail = document.getElementById('email').value;
+    var selected_role = document.getElementById('role').value;
+    var data = {
+        name : user,
+       email: mail,
+       role: selected_role
+    }
+  const xhttp = new XMLHttpRequest();
+  xhttp.onload = function() {
+    alert(JSON.parse(this.responseText).message)
+  }
+  xhttp.open("POST", "api/admin/add");
+  xhttp.setRequestHeader("Content-type", "application/json");
+  xhttp.send(JSON.stringify(data));
+   }
+
+</script>

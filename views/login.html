@@ -1,0 +1,56 @@
+<head>
+    <title>Login</title>
+    <style>
+        body {
+            display: block;
+            margin: auto;
+            width: 50%;
+            font-size: 20px;
+            margin-top: 50px;
+        }
+        input {
+            width: 30%;
+            padding: 5px;
+            font-size: 16px;
+            margin: 5px;
+
+        }
+        
+    </style>
+</head>
+<body>
+    <div>
+        <center>
+
+        <label>Username</label><br><input id='username'/><br/>
+        <label>Password</label><br><input type='password' id='password'/><br/>
+        <button onclick="login()">Login</button></center>
+    </div>
+</body>
+
+<script>
+
+function login() {
+    var user = document.getElementById('username').value;
+    var pass = document.getElementById('password').value;
+    var data = {
+        username : user,
+        password : pass
+    }
+  const xhttp = new XMLHttpRequest();
+  xhttp.onload = function() {
+    var res = JSON.parse(this.responseText)
+    if(res.role && res.role == 'user') {
+        location.href = '/user.html'
+    } else if (res.role && res.role == 'admin') {
+        location.href = '/admin.html'
+    } else {
+        alert('invalid username or password')
+    }
+  }
+  xhttp.open("POST", "api/auth/login");
+  xhttp.setRequestHeader("Content-type", "application/json");
+  xhttp.send(JSON.stringify(data));
+}
+
+</script>

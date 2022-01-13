@@ -1,0 +1,62 @@
+<head>
+    
+    <title>USER</title>
+    <style>
+      body {
+          display: block;
+          margin: auto;
+          width: 50%;
+          font-size: 20px;
+          margin-top: 50px;
+      }
+      input {
+          width: 30%;
+          padding: 5px;
+          font-size: 16px;
+          margin: 5px;
+
+      }
+      
+  </style>
+</head>
+<body>
+  Name <br><input id='name'><br>
+  Location <br><input id='loc'><br>
+  Password <br><input id='password'><br>
+<button onclick="update()">update</button>
+</body>
+
+<script>
+
+function update() {
+  var name = document.getElementById('name')
+    var loc = document.getElementById('loc')
+    var password = document.getElementById('password')
+    var data = {
+      name: name.value,
+      password: password.value,
+      location: loc.value
+    }
+  const xhttp = new XMLHttpRequest();
+  xhttp.onload = function() {
+    var res = JSON.parse(this.responseText)
+    alert(res.message)
+  }
+  xhttp.open("POST", "api/user/update");
+  xhttp.setRequestHeader("Content-type", "application/json");
+  xhttp.send(JSON.stringify(data));
+}
+  const xhttp = new XMLHttpRequest();
+  xhttp.onload = function() {
+    var name = document.getElementById('name')
+    var loc = document.getElementById('loc')
+    var password = document.getElementById('password')
+    var res = JSON.parse(this.responseText)
+    name.value = res[0]['NAME']
+    loc.value = res[0]['LOCATION']
+    // password.value = res[0]['PASSWORD']
+  }
+  xhttp.open("GET", "api/user");
+  xhttp.setRequestHeader("Content-type", "application/json");
+  xhttp.send();
+</script>
